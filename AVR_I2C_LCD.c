@@ -1,8 +1,12 @@
 /*
  * File:   I2C_LCD.c
  * Author: habib Gundogdu
- *
- * Created on October 6, 2023, 2:59 PM
+ Created on October 10, 2023, 2:59 PM
+ 
+ Piyasada satılan I2C 16X2 displayleri 
+ MPLAB XC8 MCC(MPLAB CODE CONFIGURATOR) ILE 
+ HERHANGI BIR ARDUIONO YADA AVR MCU ILE KULLANMAK ICIN
+ TASARLANMIS C LIBRARY
  */
 
 #include <avr/io.h>
@@ -11,9 +15,6 @@
 
 uint8_t i2c_lcd_adres = 0x27;  //PCF8574 adresi
 uint8_t i2c_lcd_reg = 0x4e; //PCF8574 write registeri adresi
-
-
-//void I2c_Lcd_Init(uint8_t LCD_ADDRESI)
 
 void I2c_Lcd_Init(void) {
     _delay_ms(40); // wait for >40ms
@@ -31,15 +32,12 @@ void I2c_Lcd_Init(void) {
 	_delay_ms(2);
 	I2c_Lcd_Send_Cmd (0x80);					/* Cursor 1st row 0th position */
     _delay_ms(1);
-    
-//    I2c_Lcd_Send_Cmd(0x20); // 4bit mode
-//    // dislay initialisation
-//    I2c_Lcd_Send_Cmd(0x28); // Function set --> DL=0 (4 bit mode), N = 1 (2 line display) F = 0 (5x8 characters)
-//    I2c_Lcd_Send_Cmd(0x08); //Display on/off control --> D=0,C=0, B=0  ---> display off
-//    I2c_Lcd_Send_Cmd(0x06); //Entry mode set --> I/D = 1 (increment cursor) & S = 0 (no shift)
-//    I2c_Lcd_Send_Cmd(0x0C); //Display on/off control --> D = 1, C and B = 0. (Cursor and blink, last two bits)
-
 }
+//pcf8574 <---I2C---> HERHANGI BIR ARDUIONO VEYA AVR MCU
+// D7-D6-D5-D4-LED-EN-RW-RS --<lcd
+// P7-P6-P5-P4-P3 -P2-P1-P0 --<pcf8574
+//BYTE dizilisimiz yukaridaki sekilde PCF8574 baglantisina göre yapilacak
+
 void I2c_Lcd_Send_Cmd(uint8_t data) {
     char data_u, data_l;
     uint8_t data_t[4];
@@ -55,14 +53,10 @@ void I2c_Lcd_Send_Cmd(uint8_t data) {
     I2C_write1ByteRegister(i2c_lcd_adres, i2c_lcd_reg, data_t[3]);
     
 }
-
-
+//pcf8574 <---I2C---> HERHANGI BIR ARDUIONO VEYA AVR MCU
 // D7-D6-D5-D4-LED-EN-RW-RS --<lcd
-
-// https://controllerstech.com/i2c-in-esp32-esp-idf-lcd-1602/   adresinde ayr?nt?l? anlat?lm??.
-//BYTE dizilisimiz yukaridaki sekilde PCF8574 ba?lant?s?na göre
 // P7-P6-P5-P4-P3 -P2-P1-P0 --<pcf8574
-//void I2c_Lcd_Send_Cmd(uint8_t LCD_ADDRESI,uint8_t data)
+//BYTE dizilisimiz yukaridaki sekilde PCF8574 baglantisina göre yapilacak
 
 void I2c_Lcd_Send_Byte(uint8_t data) {
     char data_u, data_l;
@@ -78,9 +72,6 @@ void I2c_Lcd_Send_Byte(uint8_t data) {
     data_t[3] = data_l | 0x09; //LED=1,en=0, RW=0, rs=1
     I2C_write1ByteRegister(i2c_lcd_adres, i2c_lcd_reg, data_t[3]);
 }
-
-//void I2c_Lcd_Send_String (uint8_t LCD_ADDRESI,const char *str){
-
 void I2c_Lcd_Send_String(const char *str) {
     int i;
     for (i = 0; (str[i] != 0)&&(i < 64); i++) /* Send each char of string till the NULL */ {
