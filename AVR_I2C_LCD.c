@@ -14,13 +14,14 @@
 #include <util/delay.h>
 
 uint8_t i2c_lcd_adres = 0x27;  //PCF8574 adresi
-uint8_t i2c_lcd_reg = 0x4e; //PCF8574 write registeri adresi
+uint8_t i2c_lcd_reg = 0x4e; //PCF8574 write registeri adresi.. 0x27<<1 şeklinde de yazabilir idik.Neden 1 sola kaydırmalıyız. 12c veri gönderirken 7 bit kullanır.8nci bit işaret(R/W) biti.
+//o nedenle adresi 1 sola kaydırıp kullanıyoruz.
 
 void I2c_Lcd_Init(void) {
     _delay_ms(40); // wait for >40ms
     I2c_Lcd_Send_Cmd(0x33);
 	_delay_ms(1);
-    I2c_Lcd_Send_Cmd(0x32);		    		/* send for 4 bit initialization of LCD  */
+    I2c_Lcd_Send_Cmd(0x32);		    	/* send for 4 bit initialization of LCD  */
     _delay_ms(1);
 	I2c_Lcd_Send_Cmd(0x28);              	/* Use 2 line and initialize 5*7 matrix in (4-bit mode)*/
     _delay_ms(1);
@@ -30,7 +31,7 @@ void I2c_Lcd_Init(void) {
 	_delay_ms(1);
     I2c_Lcd_Send_Cmd(0x01);              	/* Clear display screen*/
 	_delay_ms(2);
-	I2c_Lcd_Send_Cmd (0x80);					/* Cursor 1st row 0th position */
+	I2c_Lcd_Send_Cmd (0x80);		/* Cursor 1st row 0th position */
     _delay_ms(1);
 }
 //pcf8574 <---I2C---> HERHANGI BIR ARDUIONO VEYA AVR MCU
