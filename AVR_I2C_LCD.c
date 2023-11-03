@@ -14,7 +14,7 @@
 #include <util/delay.h>
 
 uint8_t i2c_lcd_adres = 0x27;  //PCF8574 adresi
-uint8_t i2c_lcd_reg = 0x4e; //PCF8574 write registeri adresi.. 0x27<<1 şeklinde de yazabilir idik.Neden 1 sola kaydırmalıyız. 12c veri gönderirken 7 bit kullanır.8nci bit işaret(R/W) biti.
+uint8_t i2c_lcd_reg = 0x4e; //PCF8574 write registeri adresi.. 0x27<<1 şeklinde de yazabilir idik.Neden 1 sola kaydırmalıyız. 12c veri gönderirken 7 bit kullanır.8nci biti işaret(R/W) biti olarak kullanır.
 //o nedenle adresi 1 sola kaydırıp kullanıyoruz.
 
 void I2c_Lcd_Init(void) {
